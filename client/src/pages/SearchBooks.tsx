@@ -43,16 +43,16 @@ const SearchBooks = () => {
     }
 
     try {
-      await saveBookNew({
-        variables: { input: { searchInput } },
-      })
+      // await saveBookNew({
+      //   variables: { input: { searchInput } },
+      // })
       const response = await searchGoogleBooks(searchInput);
       if (!response.ok) {
         throw new Error('something went wrong!');
       }
 
       const { items } = await response.json();
-
+      console.log(items)
       const bookData = items.map((book: GoogleAPIBook) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ['No author to display'],
@@ -83,7 +83,7 @@ const SearchBooks = () => {
     try {
       // Use the Apollo useMutation hook to execute the SAVE_BOOK mutation
       const { data } = await saveBookNew({
-        variables: { input: bookToSave }, // Pass the bookToSave object as input
+        variables: {input: {...bookToSave}}, // Pass the bookToSave object as input
       });
   
       // Check if the response contains the expected data
@@ -92,7 +92,7 @@ const SearchBooks = () => {
       }
   
       // if book successfully saves to user's account, save book id to state
-      setSavedBookIds([...savedBookIds, bookToSave.bookId]);
+      setSavedBookIds([...savedBookIds, ...bookToSave.bookId]);
     } catch (err) {
       console.error(err);
     }

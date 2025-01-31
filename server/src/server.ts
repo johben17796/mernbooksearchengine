@@ -5,6 +5,7 @@ import db from './config/connection.js'
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { typeDefs, resolvers } from './schemas/index.js';
+import { authenticateToken } from './services/auth.js';
 //import { authenticateToken } from './services/auth.js';
 
 const server = new ApolloServer({
@@ -23,9 +24,9 @@ const startApolloServer = async () => {
   app.use(express.json());
 
   app.use('/graphql', expressMiddleware(server as any
-    // ,{
-    //   context: authenticateToken as any
-    // }
+    ,{
+      context: authenticateToken as any
+    }
   ));
 
   if (process.env.NODE_ENV === 'production') {

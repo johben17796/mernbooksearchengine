@@ -14,9 +14,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // if we're in production, serve client/build as static assets
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/dist')));
-}
+const address = path.join(__dirname, '../../client/dist');
+    console.log("address!", address);
+    app.use(express.static(address));
+
+
+    app.get('*', (_req, res) => {
+      res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+    });
 
 app.use(routes);
 
